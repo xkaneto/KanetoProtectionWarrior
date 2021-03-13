@@ -1,4 +1,4 @@
-# KanetoProtectionWarrior
+# Kaneto Protection Warrior
 
 Hey guys, this is my free Protection Warrior Rotation.
 
