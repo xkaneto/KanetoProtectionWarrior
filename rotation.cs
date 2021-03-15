@@ -10,7 +10,7 @@ namespace AimsharpWow.Modules
 /// <summary>
 /// From Kaneto:
 /// I used this rotation to create a better one for Prot Warriors. Feedback to xKaneto on Discord.
-/// V1.4.3
+/// V1.4.4
 /// </summary>
 
 public class KanetoProtectionWarrior : Rotation
@@ -1510,48 +1510,50 @@ public class KanetoProtectionWarrior : Rotation
 
         //General Abilities
         Spellbook.Add(Avatar_SpellName());
-        Spellbook.Add(IgnorePain_SpellName());
+        Spellbook.Add(BattleShout_SpellName());
+        Spellbook.Add(Charge_SpellName());
         Spellbook.Add(DemoralizingShout_SpellName());
+        Spellbook.Add(Devastate_SpellName());
+        Spellbook.Add(Execute_SpellName());
+        Spellbook.Add(IgnorePain_SpellName());
+        Spellbook.Add(Intervene_SpellName());           
+        Spellbook.Add(IntimidatingShout_SpellName());
         Spellbook.Add(LastStand_SpellName());
-        Spellbook.Add(ThunderClap_SpellName());
+        Spellbook.Add(Pummel_SpellName());
+        Spellbook.Add(RallyingCry_SpellName());
         Spellbook.Add(Ravager_SpellName());
+        Spellbook.Add(Revenge_SpellName());
+        Spellbook.Add(ShatteringThrow_SpellName());
         Spellbook.Add(ShieldBlock_SpellName());
         Spellbook.Add(ShieldSlam_SpellName());
-        Spellbook.Add(Devastate_SpellName());
-        Spellbook.Add(VictoryRush_SpellName());
-        Spellbook.Add(Revenge_SpellName());
-        Spellbook.Add(IntimidatingShout_SpellName());
-        Spellbook.Add(Shockwave_SpellName());
-        Spellbook.Add(StormBolt_SpellName());
-        Spellbook.Add(RallyingCry_SpellName());
         Spellbook.Add(ShieldWall_SpellName());
-        Spellbook.Add(BattleShout_SpellName());
-        Spellbook.Add(Pummel_SpellName());
-        Spellbook.Add(Execute_SpellName());
-        Spellbook.Add(Charge_SpellName());
-        Spellbook.Add(Intervene_SpellName());           
-        Spellbook.Add(ShatteringThrow_SpellName());
+        Spellbook.Add(Shockwave_SpellName());
+        Spellbook.Add(SpellReflection_SpellName());
+        Spellbook.Add(StormBolt_SpellName());
+        Spellbook.Add(ThunderClap_SpellName());
+        Spellbook.Add(VictoryRush_SpellName());
 
         //Covenant Abilities
-        Spellbook.Add(SpearofBastion_SpellName());
         Spellbook.Add(AncientAftershock_SpellName());
         Spellbook.Add(ConquerorsBanner_SpellName());
+        Spellbook.Add(SpearofBastion_SpellName());
 
         //Heroism Buffs
-        Buffs.Add(Bloodlust_SpellName());
-        Buffs.Add(Heroism_SpellName());
-        Buffs.Add(TimeWarp_SpellName());
         Buffs.Add(AncientHysteria_SpellName());
-        Buffs.Add(Netherwinds_SpellName());
+        Buffs.Add(Bloodlust_SpellName());
         Buffs.Add(DrumsofRage_SpellName());
+        Buffs.Add(Heroism_SpellName());
+        Buffs.Add(Netherwinds_SpellName());
+        Buffs.Add(SpellReflection_SpellName());
+        Buffs.Add(TimeWarp_SpellName());
 
         //General Buffs
-        Buffs.Add(Victorious_SpellName());
         Buffs.Add(Avatar_SpellName());
-        Buffs.Add(IgnorePain_SpellName());
-        Buffs.Add(ShieldBlock_SpellName());
-        Buffs.Add(RevengeI_SpellName());
         Buffs.Add(BattleShout_SpellName());
+        Buffs.Add(IgnorePain_SpellName());
+        Buffs.Add(RevengeI_SpellName());
+        Buffs.Add(ShieldBlock_SpellName());
+        Buffs.Add(Victorious_SpellName());
 
         //Items used
         Items.Add(usableitems);
@@ -1736,7 +1738,9 @@ public class KanetoProtectionWarrior : Rotation
         bool BuffShieldBlockUp = BuffShieldBlockRemains > 0;
         int ShieldBlockCharges = Aimsharp.SpellCharges(ShieldBlock_SpellName());
         bool BuffRevengeUp = Aimsharp.HasBuff(RevengeI_SpellName());
-
+        int BuffSpellReflectionRemains = Aimsharp.BuffRemaining(SpellReflection_SpellName()) - GCD;
+        bool BuffSpellReflectionUp = BuffShieldBlockRemains > 0;
+        
         int CDAvatarRemains = Aimsharp.SpellCooldown(Avatar_SpellName()) - GCD;
         bool CDAvatarReady = CDAvatarRemains <= 10;
         int CDShieldSlamRemains = Aimsharp.SpellCooldown(ShieldSlam_SpellName()) - GCD;
@@ -2104,7 +2108,7 @@ public class KanetoProtectionWarrior : Rotation
             #region Interrupts
             // Interrupts
             
-            if (!InterruptsOff)
+            if (!InterruptsOff && !BuffSpellReflectionUp)
             {
                 if (Aimsharp.CanCast(Pummel_SpellName()))
                 {
@@ -2332,7 +2336,7 @@ public class KanetoProtectionWarrior : Rotation
             //actions+=/charge,if=runeforge_reprisal_equipped
             if (runeforge_reprisal_equipped)
             {
-                if (AutoCharge && Range >= 8 && Range <= 30 && Aimsharp.CanCast(Charge_SpellName(), "player") && !BuffShieldBlockUp && ShieldBlockCharges != 2)
+                if (AutomaticCharge && Range >= 8 && Range <= 30 && Aimsharp.CanCast(Charge_SpellName(), "player") && !BuffShieldBlockUp && ShieldBlockCharges != 2)
                 {
                     Aimsharp.Cast(Charge_SpellName());
                     return true;
